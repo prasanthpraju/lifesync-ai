@@ -1,6 +1,7 @@
  import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, Activity, ArrowRight, Loader2 } from "lucide-react";
+import axios from "axios"
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -10,17 +11,45 @@ function Login() {
   
   const navigate = useNavigate(); // Used to redirect after login
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+const handleLogin = async(e)=>{
 
-    // Simulate an API login request
-    setTimeout(() => {
-      console.log("Logged in with:", { email, password });
-      setIsLoading(false);
-      navigate('/dashboard'); // Redirect to dashboard automatically
-    }, 1500);
-  };
+e.preventDefault();
+
+setIsLoading(true);
+
+try{
+
+const response = await axios.post(
+
+"http://localhost:5000/api/auth/login",
+
+{
+email,
+password
+}
+
+);
+
+localStorage.setItem(
+"token",
+response.data.token
+);
+
+setIsLoading(false);
+
+navigate("/dashboard");
+
+}
+
+catch(error){
+
+console.log(error);
+
+setIsLoading(false);
+
+}
+
+};
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-zinc-950 px-4 overflow-hidden pt-20">

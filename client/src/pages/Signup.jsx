@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { User, Mail, Lock, Eye, EyeOff, UserPlus, ArrowRight, Loader2 } from "lucide-react";
-
+import axios from "axios";
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -11,17 +11,41 @@ function Signup() {
   
   const navigate = useNavigate();
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+  const handleSignup = async(e)=>{
 
-    // Simulate an API registration request
-    setTimeout(() => {
-      console.log("Registered with:", { name, email, password });
-      setIsLoading(false);
-      navigate('/dashboard'); // Redirect to dashboard after successful signup
-    }, 1500);
-  };
+e.preventDefault();
+
+setIsLoading(true);
+
+try{
+
+await axios.post(
+
+"http://localhost:5000/api/auth/signup",
+
+{
+name,
+email,
+password
+}
+
+);
+
+setIsLoading(false);
+
+navigate("/login");
+
+}
+
+catch(error){
+
+console.log(error);
+
+setIsLoading(false);
+
+}
+
+};
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-zinc-950 px-4 overflow-hidden pt-20 pb-12">
